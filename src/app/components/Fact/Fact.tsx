@@ -32,41 +32,52 @@ const Fact = ({ fact, setFacts }: FactType) => {
   };
 
   return (
-    <div>
+    <div className="flex items-center justify-between gap-[24px] px-[24px] py-[16px] bg-[#44403c] text-[20px] rounded-[16px]">
       <p className="font-sono">
         {isDisputed ? <span className="disputed">[⛔️ DISPUTED]</span> : null}
         {fact.text}
-        <a href={fact.source} target="_blank" rel="noreferrer">
+        <a
+          href={fact.source}
+          target="_blank"
+          rel="noreferrer"
+          className="text-[#a8a29e] no-underline ml-[12px] transition-transform duration-300 transform hover:text-[#3b82f6]"
+        >
           (Source)
         </a>
       </p>
       <span
-        className=""
+        className="uppercase text-[14px] rounded-[100px] px-[10px] py-[3px]"
         style={{
           backgroundColor: categoryData ? categoryData.color : "gray",
         }}
       >
         {fact.category}
       </span>
-      <div className="font-sono">
+      <div className="font-sono flex gap-[8px] ml-auto shrink-0">
         <Button
           onClick={() => handleVote("votesInteresting")}
           disabled={isUpdating}
-          className={""}
+          className={
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+          }
         >
           👍 {fact.votesInteresting}
         </Button>
         <Button
           onClick={() => handleVote("votesMindblowing")}
           disabled={isUpdating}
-          className={""}
+          className={
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+          }
         >
           🤯 {fact.votesMindblowing}
         </Button>
         <Button
           onClick={() => handleVote("votesFalse")}
           disabled={isUpdating}
-          className={""}
+          className={
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+          }
         >
           ⛔️ {fact.votesFalse}
         </Button>

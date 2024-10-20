@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "..";
-import { CATEGORIES } from "@/app/utils/category";
-import { CategoryType } from "@/app/types";
+import { Button } from "../..";
+import { CATEGORIES } from "@/app/common/utils/category";
+import { CategoryType } from "@/app/common/types";
 
 const Category = ({ setCurrentCategory }: CategoryType) => {
   return (

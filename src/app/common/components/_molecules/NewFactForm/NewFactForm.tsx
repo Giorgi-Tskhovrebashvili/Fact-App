@@ -1,8 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { Button, Input } from "..";
-import { CATEGORIES } from "@/app/utils/category";
-import { FactsType, NewFactFormType } from "@/app/types";
+import { Button, Input } from "../..";
+import { CATEGORIES } from "@/app/common/utils/category";
+import { FactsType, NewFactFormType } from "@/app/common/types";
 
 const NewFactForm = ({ setFacts, setShowForm }: NewFactFormType) => {
   const [text, setText] = useState("");

@@ -1,5 +1,5 @@
-import { FactListType, FactsType } from "@/app/types";
-import { Fact } from "..";
+import { FactListType, FactsType } from "@/app/common/types";
+import { Fact } from "../..";
 
 const FactList = ({ facts, setFacts }: FactListType) => {
   return (

@@ -1,7 +1,7 @@
-import { CATEGORIES } from "@/app/utils/category";
+import { CATEGORIES } from "@/app/common/utils/category";
 import React, { useState } from "react";
-import { Button } from "..";
-import { CategoriesType, FactType, FactsType } from "@/app/types";
+import { Button } from "../..";
+import { CategoriesType, FactType, FactsType } from "@/app/common/types";
 
 const Fact = ({ fact, setFacts }: FactType) => {
   const [isUpdating, setIsUpdating] = useState(false);

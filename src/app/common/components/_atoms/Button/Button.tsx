@@ -1,4 +1,4 @@
-import { ButtonType } from "@/app/types";
+import { ButtonType } from "@/app/common/types";
 
 const Button = ({
   className,

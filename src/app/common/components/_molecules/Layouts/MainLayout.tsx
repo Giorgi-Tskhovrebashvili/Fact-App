@@ -1,4 +1,4 @@
-import { MaynlayoutType } from "@/app/types";
+import { MaynlayoutType } from "@/app/common/types";
 
 const MainLayout = ({ children }: MaynlayoutType) => {
   return (

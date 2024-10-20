@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Button } from "..";
-import { HeaderType } from "@/app/types";
+import { Button } from "../..";
+import { HeaderType } from "@/app/common/types";
 
 const Header = ({ showForm, setShowForm }: HeaderType) => {
   return (

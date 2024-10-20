@@ -7,8 +7,8 @@ import {
   Loader,
   MainLayout,
   NewFactForm,
-} from "./components";
-import { FactsType } from "./types";
+} from "./common/components";
+import { FactsType } from "./common/types";
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);

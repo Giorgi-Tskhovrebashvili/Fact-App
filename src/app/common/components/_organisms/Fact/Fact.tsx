@@ -2,6 +2,7 @@ import { CATEGORIES } from "@/app/common/utils/category";
 import React, { useState } from "react";
 import { Button } from "../..";
 import { CategoriesType, FactType, FactsType } from "@/app/common/types";
+import supabase from "@/app/common/config/supabase";
 
 const Fact = ({ fact, setFacts }: FactType) => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -12,21 +13,33 @@ const Fact = ({ fact, setFacts }: FactType) => {
     (cat: CategoriesType) => cat.name === fact.category
   );
 
-  const handleVote = (
-    columnName: keyof Pick<
-      FactsType,
-      "votesInteresting" | "votesMindblowing" | "votesFalse"
-    >
+  const handleVote = async (
+    fact: FactsType,
+    voteType: "votesInteresting" | "votesMindblowing" | "votesFalse"
   ) => {
     setIsUpdating(true);
 
-    setFacts((prevFacts) =>
-      prevFacts.map((prevFact) =>
-        prevFact.id === fact.id
-          ? { ...prevFact, [columnName]: prevFact[columnName] + 1 }
-          : prevFact
-      )
-    );
+    // setFacts((prevFacts) =>
+    //   prevFacts.map((prevFact) =>
+    //     prevFact.id === fact.id
+    //       ? { ...prevFact, [columnName]: prevFact[columnName] + 1 }
+    //       : prevFact
+    //   )
+    // );
+
+    const updateData = { [voteType]: fact[voteType] + 1 };
+
+    const { data: updatedFact, error } = await supabase
+      .from("facts")
+      .update(updateData)
+      .eq("id", fact.id)
+      .select();
+
+    if (!error && updatedFact) {
+      setFacts((facts) =>
+        facts.map((f) => (f.id === fact.id ? updatedFact[0] : f))
+      );
+    }
 
     setIsUpdating(false);
   };
@@ -55,28 +68,28 @@ const Fact = ({ fact, setFacts }: FactType) => {
       </span>
       <div className="font-sono flex gap-[8px] ml-auto shrink-0">
         <Button
-          onClick={() => handleVote("votesInteresting")}
+          onClick={() => handleVote(fact, "votesInteresting")}
           disabled={isUpdating}
           className={
-            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524] disabled:bg-[#44403c]"
           }
         >
           👍 {fact.votesInteresting}
         </Button>
         <Button
-          onClick={() => handleVote("votesMindblowing")}
+          onClick={() => handleVote(fact, "votesMindblowing")}
           disabled={isUpdating}
           className={
-            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524] disabled:bg-[#44403c]"
           }
         >
           🤯 {fact.votesMindblowing}
         </Button>
         <Button
-          onClick={() => handleVote("votesFalse")}
+          onClick={() => handleVote(fact, "votesFalse")}
           disabled={isUpdating}
           className={
-            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524]"
+            "bg-[#78716c] px-[12px] py-[6px] rounded-[100px] text-[18px] font-semibold transition-transform duration-300 transform cursor-pointer hover:bg-[#292524] disabled:bg-[#44403c]"
           }
         >
           ⛔️ {fact.votesFalse}

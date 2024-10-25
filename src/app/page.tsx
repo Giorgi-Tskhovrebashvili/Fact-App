@@ -9,6 +9,7 @@ import {
   NewFactForm,
 } from "./common/components";
 import { FactsType } from "./common/types";
+import supabase from "./common/config/supabase";
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -17,41 +18,61 @@ export default function Home() {
   const [currentCategory, setCurrentCategory] = useState("all");
   const [error, setError] = useState<string | null>(null);
 
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("/data.json");
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       const jsonData = await response.json();
+
+  //       if (isMounted) {
+  //         setFacts(jsonData);
+  //       }
+  //     } catch (error) {
+  //       if (isMounted) {
+  //         if (error instanceof Error) {
+  //           setError(error.message);
+  //         } else {
+  //           setError("An unknown error occurred");
+  //         }
+  //       }
+  //     } finally {
+  //       if (isMounted) {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
+
   useEffect(() => {
-    let isMounted = true;
+    const getFacts = async () => {
+      setIsLoading(true);
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/data.json");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+      const { data: factdata, error: fetchError } = await supabase
+        .from("facts")
+        .select("*");
 
-        const jsonData = await response.json();
-
-        if (isMounted) {
-          setFacts(jsonData);
-        }
-      } catch (error) {
-        if (isMounted) {
-          if (error instanceof Error) {
-            setError(error.message);
-          } else {
-            setError("An unknown error occurred");
-          }
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+      if (fetchError) {
+        setError(fetchError.message);
+      } else {
+        setFacts(factdata as FactsType[]);
       }
+
+      setIsLoading(false);
     };
 
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
+    getFacts();
   }, []);
 
   if (error) return <p>Error: {error}</p>;

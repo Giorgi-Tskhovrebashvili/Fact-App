@@ -2,11 +2,12 @@
 import { FormEvent, useState } from "react";
 import { Button, Input } from "../..";
 import { CATEGORIES } from "@/app/common/utils/category";
-import { FactsType, NewFactFormType } from "@/app/common/types";
+import { NewFactFormType } from "@/app/common/types";
+import supabase from "@/app/common/config/supabase";
 
 const NewFactForm = ({ setFacts, setShowForm }: NewFactFormType) => {
   const [text, setText] = useState("");
-  const [source, setSource] = useState("");
+  const [source, setSource] = useState("https://example.com");
   const [category, setCategory] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const textLength = text.length;
@@ -20,21 +21,30 @@ const NewFactForm = ({ setFacts, setShowForm }: NewFactFormType) => {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (text && isValidHttpUrl(source) && category && textLength <= 200) {
-      const newFact: FactsType = {
-        id: Date.now(),
-        text,
-        source,
-        category,
-        votesInteresting: 0,
-        votesMindblowing: 0,
-        votesFalse: 0,
-      };
+      // const newFact: FactsType = {
+      //   id: Date.now(),
+      //   text,
+      //   source,
+      //   category,
+      //   votesInteresting: 0,
+      //   votesMindblowing: 0,
+      //   votesFalse: 0,
+      // };
 
-      setFacts((prevFacts) => [newFact, ...prevFacts]);
+      const { data: newFact, error } = await supabase
+        .from("facts")
+        .insert([{ text, source, category }])
+        .select();
+
+      if (error) {
+        error.message;
+      } else if (newFact && newFact.length > 0) {
+        setFacts((facts) => [newFact[0], ...facts]);
+      }
 
       setText("");
       setSource("");
@@ -58,7 +68,7 @@ const NewFactForm = ({ setFacts, setShowForm }: NewFactFormType) => {
         onChange={(e) => setText(e.target.value)}
         disabled={isUploading}
         className={
-          "w-[250px] bg-[#78716c] rounded-[100px] p-[16px] text-[18px] placeholder-custom-gray"
+          "w-[850px] bg-[#78716c] rounded-[100px] p-[16px] text-[18px] placeholder-custom-gray"
         }
       />
       <span className="text-[18px] font-semibold">{200 - textLength}</span>

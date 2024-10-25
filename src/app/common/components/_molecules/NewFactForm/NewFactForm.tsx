@@ -41,7 +41,7 @@ const NewFactForm = ({ setFacts, setShowForm }: NewFactFormType) => {
         .select();
 
       if (error) {
-        error.message;
+        console.error(error.message);
       } else if (newFact && newFact.length > 0) {
         setFacts((facts) => [newFact[0], ...facts]);
       }
